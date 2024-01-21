@@ -1,0 +1,14 @@
+---
+title: "Simulated Data for the Analysis of Major Crimes in Toronto"
+author: "Boxuan Yi"
+format: html
+---
+
+```{r}
+#### Preamble ####
+# Purpose: Simulate the dataset of major crimes in Toronto
+# Author: Boxuan Yi
+# Email: boxuan.yi@mail.utoronto.ca
+# Date: 17 January 2024
+```
+

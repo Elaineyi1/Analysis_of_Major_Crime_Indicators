@@ -1,0 +1,184 @@
+---
+title: "Analysis of Major Crimes in Toronto And Suggestions on How to Protect Ourselves"
+author: "Boxuan Yi"
+date: 20 January 2024
+abstract: "Safety is one of the most important factors that people consider when deciding where to live and go. This report uses data from Open Data Toronto to analyze the occurrences of various types of crimes in different regions of Toronto, as well as the trend over the past ten years. The result shows that Downtown Toronto and evenings have a relatively high occurrences of crimes, which could be used as a suggestion on both individuals and government dicision-making."
+format: pdf
+bibliography: references.bib
+---
+## Introduction
+On Dec 25th, 2023, the Christmas Day, a news has raised huge concerns among people — a man was seriously injured after stabbing in downtown Toronto. This was not the first such incident on that block in December; unfortunately, such distressing news has become more and more prevalent nowadays. As the pandemic comes to an end, there is a noticeable increase in people returning to the office and going out more frequently than in previous years. Naturally, public safety has become particularly crucial, prompting a crucial question: How can we proactively prevent such incidents from affecting ourselves and our loved ones?
+
+Providing information like location and crime types, major crimes statistics is an important tool for resource allocation and law enforcement strategy. It also provides the public a clear picture of the safety, which helps individuals make informed decisions, influence choices such as where to buy a house. 
+
+For this paper, I will use open-access data from the OpenDataToronto [@rOpenDataToronto] to analyze major crime patterns over the years and how ordinary citizens could do to reduce the likelihood of getting hurt. In addition, I will discuss how funding could be allocated for higher efficiency and potential bias in crime data. In this paper, I discuss the data in Section 2, including data source and software (Section 2.1), data collection (Section 2.2), data analysis and visualizations (Section 2.3). In Section 3, I conclude that….
+
+```{r}
+#| message: false
+#| echo: false
+# Load packages
+library(opendatatoronto)
+library(janitor)
+library(tidyverse)
+library(leaflet)
+library(dplyr)
+library(here)
+library(knitr)
+```
+
+```{r}
+#| message: false
+#| echo: false
+clean_mci_data <- read_csv(
+    file = here("inputs/data/clean_mci.csv"))
+```
+
+```{r}
+#| include: false
+# Test
+clean_mci_data$report_year |> min() == 2014
+clean_mci_data$report_year |> max() == 2023
+clean_mci_data$occ_year |> unique()
+any(duplicated(clean_mci_data$x_id))
+
+clean_mci_data$mci_category |> unique() == c("Assault", "Robbery", "Auto Theft", "Break and Enter", "Theft Over")
+clean_mci_data$division |> unique()
+clean_mci_data$occ_dow |> unique()
+clean_mci_data$occ_hour |> class() == "numeric"
+```
+
+## Data
+### Data Source and Software
+The data utilized throughout this paper, in csv format, is obtained from Toronto Police Services on the City of Toronto Open Data Website [@rOpenDataToronto], with the title “MAJOR CRIME INDICATORS”.
+
+This dataset will be processed and analyzed in the open source R [@r] using packages Dplyr [@rDplyr], Tidyverse [@rTidyverse], Here [@rHere], Leaflet [@rLeaflet], and Janitor [@rJanitor]. Visualizations including tables and figures will be created using ggplot2 [@rGgplot2] and Knitr[@Knitr]. 
+
+### Data Collection
+The dataset contains all Major Crime Indicators occurrences by report data. The categories of major crimes are Assault, Break and Enter, Auto Theft, Robbery and Theft Over. The latest refresh was on Jan 11, 2024.
+
+There are two factors that may influence the reliability of the data. First, this dataset includes all occurrences reported to the Toronto Police Station, except those have been considered as unfounded. Second, this data is provided at the offence and victim level, so one occurrence number may have a few rows of data with different major crime indicators types used to categorize the occurrence. 
+
+### Data Analysis and Visualizations
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-clean_mci_data
+#| tbl-cap: The Number of Major Crimes and the Month with the Most Crimes (2014-2023)
+# Create a table with year, 2014 to 2023, the number of crimes in each year, and the month with the most crimes correspondingly.
+clean_mci_data |>
+  filter(occ_year >= 2014) |>
+  group_by(occ_year, occ_month) |>
+  summarise(n = n()) |>
+  group_by(occ_year) |>
+  summarise(
+    total_number_of_crimes = sum(n),
+    the_most_frequent_month = occ_month[which.max(n)]
+  ) |>
+  distinct(occ_year, .keep_all = TRUE) |>
+  select(occ_year, total_number_of_crimes, the_most_frequent_month) |> 
+  kable(
+    col.names = c("Year", "Total Number of Crimes", "Month with the Most Crimes"),
+    booktabs = TRUE
+  )
+```
+
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-types_of_crimes
+#| fig-cap: The Number of Crimes Reported, Classified by Crime Types (2014-2023)
+clean_mci_data |>
+  ggplot(mapping = aes(x = factor(report_year), fill = mci_category)) +
+  geom_bar(position = "stack", stat = "count") +
+  labs(x = "Year", y = "Total Number of Crimes", fill = "Types of Major Crimes") +
+  theme(legend.position = "right") +
+  scale_fill_brewer(palette = "Set3")
+```
+
+```{r}
+#| include: false
+clean_mci_data <- clean_mci_data |>
+  mutate(
+    division_area =
+      case_match(
+        division,
+        "D43" ~ "Scarborough",
+        "D42" ~ "Scarborough",
+        "D41" ~ "Scarborough",
+        "D53" ~ "Toronto-East York",
+        "D55" ~ "Toronto-East York",
+        "D52" ~ "Toronto-East York",
+        "D51" ~ "Toronto-East York",
+        "D54" ~ "Toronto-East York",
+        "D32" ~ "North York",
+        "D33" ~ "North York",
+        "D31" ~ "North York",
+        "D22" ~ "Etobicoke",
+        "D23" ~ "Etobicoke",
+        "D14" ~ "Etobicoke-York",
+        "D11" ~ "Etobicoke-York",
+        "D12" ~ "Etobicoke-York",
+        "D13" ~ "Etobicoke-York",
+        "NSA" ~ "Other"))
+```
+
+```{r}
+#| include: false
+clean_mci_data <- clean_mci_data |> 
+  mutate(
+    weekday_weekend =
+      case_match(
+        occ_dow,
+        "Wednesday" ~ "Weekday",
+        "Tuesday" ~ "Weekday",
+        "Thursday" ~ "Weekday",
+        "Sunday" ~ "Weekend",
+        "Monday" ~ "Weekday",
+        "Friday" ~ "Weekday",
+        "Saturday" ~ "Weekend",
+        "" ~ "Other"))
+head(clean_mci_data)
+```
+
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-area_of_crimes
+#| fig-cap: Total Number of Crimes in Different Police Division Areas
+clean_mci_data |>
+  filter(occ_year >= 2014) |>
+  count(occ_year, division_area) |>
+  ggplot(aes(x = occ_year, y = n, color = division_area)) +
+  geom_point() +
+  geom_jitter() +
+  geom_smooth(method = lm, se = FALSE) +
+  labs(x = "Year",
+       y = "Total Number of Crimes",
+       color = "Division Area")
+```
+
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-time_of_crimes
+#| fig-cap: Number of Crimes in a Day
+clean_mci_data |>
+  filter(weekday_weekend == 'Weekday' | weekday_weekend == 'Weekend') |>
+  count(occ_hour, weekday_weekend) |>
+  ggplot(mapping = aes(x = occ_hour, y = n, color = weekday_weekend)) +
+  geom_line() +
+  theme(legend.position = "top") +
+  labs(x = "Time In a Day", y = "Number of Crimes", color = "Weekday or Weekend") +
+  scale_color_manual(values = c("Weekday" = "steelblue3", "Weekend" = "indianred3"))
+```
+
+## Conclusion
+In summary, 
+
+\newpage
+
+## References
+
+
+
