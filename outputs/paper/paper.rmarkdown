@@ -6,12 +6,14 @@ abstract: "Safety is one of the most important factors that people consider when
 format: pdf
 bibliography: references.bib
 ---
+
 ## Introduction
 On Dec 25th, 2023, the Christmas Day, a news has raised huge concerns among people — a man was seriously injured after stabbing in downtown Toronto. This was not the first such incident on that block in December; unfortunately, such distressing news has become more and more prevalent nowadays. As the pandemic comes to an end, there is a noticeable increase in people returning to the office and going out more frequently than in previous years. Naturally, public safety has become particularly crucial, prompting a crucial question: How can we proactively prevent such incidents from affecting ourselves and our loved ones?
 
 Providing information like location and crime types, major crimes statistics is an important tool for resource allocation and law enforcement strategy. It also provides the public a clear picture of the safety, which helps individuals make informed decisions, influence choices such as where to buy a house. 
 
 For this paper, I will use open-access data from the OpenDataToronto [@rOpenDataToronto] to analyze major crime patterns over the years and how ordinary citizens could do to reduce the likelihood of getting hurt. In addition, I will discuss how funding could be allocated for higher efficiency and potential bias in crime data. In this paper, I discuss the data in Section 2, including data source and software (Section 2.1), data collection (Section 2.2), data analysis and visualizations (Section 2.3). In Section 3, I conclude that….
+
 
 ```{r}
 #| message: false
@@ -47,6 +49,7 @@ clean_mci_data$occ_dow |> unique()
 clean_mci_data$occ_hour |> class() == "numeric"
 ```
 
+
 ## Data
 
 ### Data Source and Software
@@ -61,6 +64,7 @@ There are two factors that may influence the reliability of the data. First, thi
 
 ### Data Analysis and Visualizations
 The Major Crimes in Toronto dataset contains 27 columns and 372899 rows, including the repeated occurrences with different crime categories. All the samples of major crimes were reported from 2014 to 2023. Among 27 columns, the variables I will use are x_id, report_year, occ_year, occ_month, occ_dow (Day of the Week Offence Occurred), occ_hour, mci_category, division. I will create two more variables, division_area, which classifies 18 police divisions (including a NSA) into 6 regions of Toronto (including Other for NSA), and weekend_weekday, which indicates whether the occurrence happen on a weekday or a weekend. 
+
 
 ```{r}
 #| message: false
@@ -84,7 +88,9 @@ clean_mci_data |>
     booktabs = TRUE
   )
 ```
+
 Table 1 provides a brief summary of the total number of crimes from 2014 to 2023. Over this period, the overall number of crimes shows a consistent increase, except for the years 2020 and 2021, which have a decline probably due to the impact of the pandemic. However, in 2022 and 2023, there is a significant increase by more than 6000. In each year, the month with the highest number of crimes tends to be either July, August, or October, concentrating primarily in the summer-fall period. 
+
 
 
 ```{r}
@@ -99,7 +105,9 @@ clean_mci_data |>
   theme(legend.position = "right") +
   scale_fill_brewer(palette = "Set3")
 ```
+
 Figure 1 visualizes the annual distribution of major crime types with five categories: Assault, Break and Enter, Auto Theft, Robbery, and Theft Over. Across all years, 'Assault' records the highest count, followed by 'Break and Enter' and 'Auto Theft'. 'Robbery' and 'Theft Over' show comparatively lower numbers. Notably, there has been a slight decrease in “Break and Enter” since the pandemic, and an obvious increase in 'Auto Theft' during 2022 and 2023, leading ‘Auto Theft’ surpassing the number of 'Break and Enter’.
+
 
 
 ```{r}
@@ -163,8 +171,10 @@ clean_mci_data |>
        y = "Total Number of Crimes",
        color = "Division Area")
 ```
+
 There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. Putting them into 6 regions based on geographical location, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York, and other for NSA.
 Based on Figure 2, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two.
+
 
 
 ```{r}
@@ -182,6 +192,7 @@ clean_mci_data |>
   scale_color_manual(values = c("Weekday" = "steelblue3", "Weekend" = "indianred3"))
 ```
 
+
 Figure 3 indicates the preferred time for committing crimes. The graph reveals a higher likelihood of criminal behaviors during the evening, with occurrences steadily increasing as the night progresses towards midnight and afterwards, the occurrences decrease until six in the morning. Interestingly, there is a surprising local peak at noon, while 11:00 and 13:00 do not show a high probability.
 
 ## Conclusion
@@ -190,6 +201,7 @@ In summary,
 \newpage
 
 ## References
+
 
 
 
