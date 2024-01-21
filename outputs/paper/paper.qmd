@@ -22,6 +22,7 @@ library(janitor)
 library(tidyverse)
 library(leaflet)
 library(dplyr)
+library(ggplot2)
 library(here)
 library(knitr)
 ```
@@ -86,7 +87,6 @@ clean_mci_data |>
 ```
 Table 1 provides a brief summary of the total number of crimes from 2014 to 2023. Over this period, the overall number of crimes shows a consistent increase, except for the years 2020 and 2021, which have a decline probably due to the impact of the pandemic. However, in 2022 and 2023, there is a significant increase by more than 6000. In each year, the month with the highest number of crimes tends to be either July, August, or October, concentrating primarily in the summer-fall period. 
 
-
 ```{r}
 #| message: false
 #| echo: false
@@ -100,7 +100,6 @@ clean_mci_data |>
   scale_fill_brewer(palette = "Set3")
 ```
 Figure 1 visualizes the annual distribution of major crime types with five categories: Assault, Break and Enter, Auto Theft, Robbery, and Theft Over. Across all years, 'Assault' records the highest count, followed by 'Break and Enter' and 'Auto Theft'. 'Robbery' and 'Theft Over' show comparatively lower numbers. Notably, there has been a slight decrease in “Break and Enter” since the pandemic, and an obvious increase in 'Auto Theft' during 2022 and 2023, leading ‘Auto Theft’ surpassing the number of 'Break and Enter’.
-
 
 ```{r}
 #| include: false
@@ -166,6 +165,7 @@ clean_mci_data |>
 There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. Putting them into 6 regions based on geographical location, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York, and other for NSA.
 Based on Figure 2, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two.
 
+Based on Figure 2, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two.
 
 ```{r}
 #| message: false
@@ -181,7 +181,6 @@ clean_mci_data |>
   labs(x = "Time In a Day", y = "Number of Crimes", color = "Weekday or Weekend") +
   scale_color_manual(values = c("Weekday" = "steelblue3", "Weekend" = "indianred3"))
 ```
-
 Figure 3 indicates the preferred time for committing crimes. The graph reveals a higher likelihood of criminal behaviors during the evening, with occurrences steadily increasing as the night progresses towards midnight and afterwards, the occurrences decrease until six in the morning. Interestingly, there is a surprising local peak at noon, while 11:00 and 13:00 do not show a high probability.
 
 ## Conclusion
