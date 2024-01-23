@@ -6,6 +6,7 @@ format: html
 
 ```{r}
 #### Preamble ####
+# Acquire
 # Purpose: Download and save the actual data on major crimes that reported in Toronto 
 # from 2014 to 2023
 # Author: Boxuan Yi

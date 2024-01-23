@@ -2,17 +2,17 @@
 title: "Analysis of Major Crimes in Toronto And Suggestions on How to Protect Ourselves"
 author: "Boxuan Yi"
 date: 20 January 2024
-abstract: "Safety is one of the most important factors that people consider when deciding where to live and go. This report uses data from Open Data Toronto to analyze the occurrences of various types of crimes in different regions of Toronto, as well as the trend over the past ten years. The result shows that Downtown Toronto and evenings have a relatively high occurrences of crimes, which could be used as a suggestion on both individuals and government dicision-making."
+abstract: "Safety is one of the most important factors that people consider when deciding where to live and go. This report uses data from Open Data Toronto to analyze the occurrences of various types of crimes in different regions and time of Toronto, as well as the trend over the past ten years. The result shows that Downtown Toronto and evenings & noon have a relatively high occurrences of crimes, which could be used as a suggestion on both individual and government dicision-making."
 format: pdf
 bibliography: references.bib
 ---
 
 ## Introduction
-On Dec 25th, 2023, the Christmas Day, a news has raised huge concerns among people — a man was seriously injured after stabbing in downtown Toronto. This was not the first such incident on that block in December; unfortunately, such distressing news has become more and more prevalent nowadays. As the pandemic comes to an end, there is a noticeable increase in people returning to the office and going out more frequently than in previous years. Naturally, public safety has become particularly crucial, prompting a crucial question: How can we proactively prevent such incidents from affecting ourselves and our loved ones?
+On Dec 25th, 2023, the Christmas Day, a news has raised huge concerns among people — a man was seriously injured after stabbing in downtown Toronto. This was not the first such incident on that block in December; unfortunately, such distressing news has become more and more prevalent nowadays. As the pandemic comes to an end, there is a noticeable increase in people returning to the office and going out more frequently than in previous years. Naturally, public safety and private security have become particularly crucial, leading to a significant question: How can we proactively prevent such incidents from affecting ourselves and our loved ones?
 
-Providing information like location and crime types, major crimes statistics is an important tool for resource allocation and law enforcement strategy. It also provides the public a clear picture of the safety, which helps individuals make informed decisions, influence choices such as where to buy a house. 
+Major crimes statistics is an important tool for resource allocation and law enforcement strategy. It also provides the public a clear picture of the safety and helps individuals make informed decisions, influencing choices such as when to go out and where to buy a house. For this paper, I will use open-access data, titled ‘Major Crime Indicator’ from the OpenDataToronto [@rOpenDataToronto] to analyze the distribution of major crimes—classified as Assault, Break and Enter, Auto Theft, Robbery, and Theft Over—over the past ten years. My analysis will also delve into practical actions ordinary citizens and the government can do to enhance safety and efficiency.
 
-For this paper, I will use open-access data from the OpenDataToronto [@rOpenDataToronto] to analyze major crime patterns over the years and how ordinary citizens could do to reduce the likelihood of getting hurt. In addition, I will discuss how funding could be allocated for higher efficiency and potential bias in crime data. In this paper, I discuss the data in Section 2, including data source and software (Section 2.1), data collection (Section 2.2), data analysis and visualizations (Section 2.3). In Section 3, I conclude that….
+In this paper, I discuss the data in Section 2, including data source and software (Section 2.1), data collection (Section 2.2), data analysis and visualizations (Section 2.3). In Section 3, I conclude that Toronto-East York & evening and noon experience the highest numbers of crimes. Among the five major crime categories as mentioned, 'Assault' records the highest count, with 'Break and Enter' and 'Auto Theft' following closely.
 
 
 ```{r}
@@ -24,6 +24,7 @@ library(janitor)
 library(tidyverse)
 library(leaflet)
 library(dplyr)
+library(ggplot2)
 library(here)
 library(knitr)
 ```
@@ -37,6 +38,7 @@ clean_mci_data <- read_csv(
 
 ```{r}
 #| include: false
+# Explore
 # Test
 clean_mci_data$report_year |> min() == 2014
 clean_mci_data$report_year |> max() == 2023
@@ -53,9 +55,9 @@ clean_mci_data$occ_hour |> class() == "numeric"
 ## Data
 
 ### Data Source and Software
-The data utilized throughout this paper, in csv format, is obtained from Toronto Police Services on the City of Toronto Open Data Website [@rOpenDataToronto], with the title “MAJOR CRIME INDICATORS”.
+The data utilized throughout this paper, in csv format, was obtained from Toronto Police Services on the City of Toronto Open Data Website [@rOpenDataToronto], with the title “MAJOR CRIME INDICATORS”.
 
-This dataset will be processed and analyzed in the open source R [@r] using packages Dplyr [@rDplyr], Tidyverse [@rTidyverse], Here [@rHere], Leaflet [@rLeaflet], and Janitor [@rJanitor]. Visualizations including tables and figures will be created using ggplot2 [@rGgplot2] and Knitr[@Knitr]. 
+The dataset will be processed and analyzed in R [@r] using packages Dplyr [@rDplyr], Tidyverse [@rTidyverse], Here [@rHere], Leaflet [@rLeaflet], and Janitor [@rJanitor]. Visualizations including tables and figures will be created using ggplot2 [@rGgplot2] and Knitr[@Knitr]. 
 
 ### Data Collection
 The dataset contains all Major Crime Indicators occurrences by report data. The categories of major crimes are Assault, Break and Enter, Auto Theft, Robbery and Theft Over. The latest refresh was on Jan 11, 2024.
@@ -92,7 +94,6 @@ clean_mci_data |>
 Table 1 provides a brief summary of the total number of crimes from 2014 to 2023. Over this period, the overall number of crimes shows a consistent increase, except for the years 2020 and 2021, which have a decline probably due to the impact of the pandemic. However, in 2022 and 2023, there is a significant increase by more than 6000. In each year, the month with the highest number of crimes tends to be either July, August, or October, concentrating primarily in the summer-fall period. 
 
 
-
 ```{r}
 #| message: false
 #| echo: false
@@ -106,8 +107,9 @@ clean_mci_data |>
   scale_fill_brewer(palette = "Set3")
 ```
 
-Figure 1 visualizes the annual distribution of major crime types with five categories: Assault, Break and Enter, Auto Theft, Robbery, and Theft Over. Across all years, 'Assault' records the highest count, followed by 'Break and Enter' and 'Auto Theft'. 'Robbery' and 'Theft Over' show comparatively lower numbers. Notably, there has been a slight decrease in “Break and Enter” since the pandemic, and an obvious increase in 'Auto Theft' during 2022 and 2023, leading ‘Auto Theft’ surpassing the number of 'Break and Enter’.
+Factors contributing to this uptrend are multifaceted, ranging from societal shifts associated with the pandemic to economic uncertainties. In particular, I will discuss the distribution of crimes from three aspects: types of crime, regions and time in a day. 
 
+Figure 1 visualizes the annual distribution of major crime types with five categories: Assault, Break and Enter, Auto Theft, Robbery, and Theft Over. Across all years, 'Assault' records the highest count, followed by 'Break and Enter' and 'Auto Theft'. 'Robbery' and 'Theft Over' show comparatively lower numbers. Notably, there has been a slight decrease in “Break and Enter” since the pandemic, and an obvious increase in 'Auto Theft' during 2022 and 2023, leading ‘Auto Theft’ surpassing the number of 'Break and Enter’.
 
 
 ```{r}
@@ -155,6 +157,20 @@ clean_mci_data <- clean_mci_data |>
 clean_mci_data
 ```
 
+There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. I put them into 6 geographical regions, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York, and other. 
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-division_area
+#| tbl-cap: Police divisions in 6 areas(including other)
+
+clean_mci_data%>%
+  group_by(division_area) %>%
+  summarise(division = toString(unique(division))) |> kable()
+
+```
+
 ```{r}
 #| message: false
 #| echo: false
@@ -172,9 +188,8 @@ clean_mci_data |>
        color = "Division Area")
 ```
 
-There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. Putting them into 6 regions based on geographical location, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York, and other for NSA.
-Based on Figure 2, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two.
 
+Based on Figure 2, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two. 
 
 
 ```{r}
@@ -192,11 +207,23 @@ clean_mci_data |>
   scale_color_manual(values = c("Weekday" = "steelblue3", "Weekend" = "indianred3"))
 ```
 
+Figure 3 indicates the preferred time to commit crimes. The graph reveals a higher likelihood of criminal behaviours during the evening, with occurrences steadily increasing as the night progresses towards midnight and afterwards, the occurrences decrease until six in the morning. Interestingly, there is a surprising local peak at noon, while 11:00 and 13:00 do not show a high probability.
 
-Figure 3 indicates the preferred time for committing crimes. The graph reveals a higher likelihood of criminal behaviors during the evening, with occurrences steadily increasing as the night progresses towards midnight and afterwards, the occurrences decrease until six in the morning. Interestingly, there is a surprising local peak at noon, while 11:00 and 13:00 do not show a high probability.
+
+```{r}
+# Share
+```
+
+
 
 ## Conclusion
-In summary, 
+In summary, ‘Assault’ has always ranked as the most common major crime over the past ten years. However, the difference between ‘Auto Theft’ and ‘Assault’ is shrinking, as the number of ‘Auto Theft’ is increasing rapidly. There need be more safety actions on automobiles, and people should lock the doors and not leave any packages visible through car windows to improve automobile security. Due to the difficulty to prove ‘Assault’ as a crime, installing cameras at the front door or home security systems is a good idea to provide evidence for ‘Assault’, while it can also record suspicious individuals and vehicles near one's residence. Taking proactive steps, such as responding to knocks cautiously while keeping the door locked, and refraining from touching anything until the police have inspected, is crucial for personal safety and should be instilled in children as well.
+
+The Toronto-East York region reports the highest number of crimes, with North York, Scarborough, and Etobicoke-York following. Resources and fundings allocation should have an emphasis on Toronto-East York, especially the downtown area, considering the amount of people coming to work despite not residing there. 
+
+Focus on safety during midnight and noon hours is important too. The most common time for a crime occurrence include noon and midnight, especially between 6:00 PM to 8:00 PM. In order to prevent such incidents, people who work from home but go out for lunch, as well as those with children returning home for lunch around noon, should keep their ears and eyes open for suspicious surroundings. Evening hours in any region also need more cautions from residents and security from the government.
+
+It is crucial to recognize that, though Toronto-East York records the most crimes, it also has the largest number of residents. Therefore, it could be biased to claim that Toronto-East York has the highest crime rate, or North York is getting dangerous, as North York has witnessed a growing population in recent years. Moreover, when creating this dataset, one occurrence number may have a few rows with different major crime indicators types used to categorize the occurrence. Therefore, some incidents of 'Auto Theft,' 'Robbery,' and 'Theft Over' may be potentially recorded multiple times under 'Break and Enter.' Consequently, the number of crimes classified as just ‘Break and Enter’ is overestimated, the actual number may be lower than what is shown now in the dataset.
 
 \newpage
 
