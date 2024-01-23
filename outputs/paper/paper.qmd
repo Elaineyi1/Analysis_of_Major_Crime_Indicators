@@ -151,7 +151,7 @@ clean_mci_data <- clean_mci_data |>
         "" ~ "Other"))
 clean_mci_data
 ```
-There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. I put them into 6 geographical regions, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York, and other, as shown in Table 2.Based on Figure 2, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two. 
+There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. I put them into 6 geographical regions, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York, and other, as shown in Table 2. Based on Figure 2, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two. 
 ```{r}
 #| message: false
 #| echo: false
@@ -195,6 +195,7 @@ clean_mci_data |>
   labs(x = "Time In a Day", y = "Number of Crimes", color = "Weekday or Weekend") +
   scale_color_manual(values = c("Weekday" = "steelblue3", "Weekend" = "indianred3"))
 ```
+\newpage
 Figure 3 indicates the preferred time to commit crimes. The graph reveals a higher likelihood of criminal behaviours during the evening, with occurrences steadily increasing as the night progresses towards midnight and afterwards, the occurrences decrease until six in the morning. Interestingly, there is a surprising local peak at noon, while 11:00 and 13:00 do not show a high probability.
 
 ```{r}
@@ -202,7 +203,7 @@ Figure 3 indicates the preferred time to commit crimes. The graph reveals a high
 # Share
 ```
 
-\newpage
+
 # Conclusion
 In summary, ‘Assault’ has always ranked as the most common major crime over the past ten years. However, the difference between ‘Auto Theft’ and ‘Assault’ is shrinking, as the number of ‘Auto Theft’ is increasing rapidly. There need be more safety actions on automobiles, and people should lock the doors and not leave any packages visible through car windows to improve automobile security. Due to the difficulty to prove ‘Assault’ as a crime, installing cameras at the front door or home security systems is a good idea to provide evidence for ‘Assault’, while it can also record suspicious individuals and vehicles near one's residence. Taking proactive steps, such as responding to knocks cautiously while keeping the door locked, and refraining from touching anything until the police have inspected, is crucial for personal safety and should be instilled in children as well.
 
@@ -211,7 +212,6 @@ The Toronto-East York region reports the highest number of crimes, with North Yo
 Focus on safety during midnight and noon hours is important too. The most common time for a crime occurrence include noon and midnight, especially between 6:00 PM to 8:00 PM. In order to prevent such incidents, people who work from home but go out for lunch, as well as those with children returning home for lunch around noon, should keep their ears and eyes open for suspicious surroundings. Evening hours in any region also need more cautions from residents and security from the government.
 
 It is crucial to recognize that, though Toronto-East York records the most crimes, it also has the largest number of residents. Therefore, it could be biased to claim that Toronto-East York has the highest crime rate, or North York is getting dangerous, as North York has witnessed a growing population in recent years. Moreover, when creating this dataset, one occurrence number may have a few rows with different major crime indicators types used to categorize the occurrence. Therefore, some incidents of 'Auto Theft,' 'Robbery,' and 'Theft Over' may be potentially recorded multiple times under 'Break and Enter.' Consequently, the number of crimes classified as just ‘Break and Enter’ is overestimated, the actual number may be lower than what is shown now in the dataset.
-
 
 \newpage
 # References
