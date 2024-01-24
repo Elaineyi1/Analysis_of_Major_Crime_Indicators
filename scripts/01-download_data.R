@@ -1,11 +1,3 @@
----
-title: "Download and Save the Actual Data on MCI"
-author: "Boxuan Yi"
-format: html
----
-
-```{r}
-#### Preamble ####
 # Acquire
 # Purpose: Download and save the actual data on major crimes that reported in Toronto 
 # from 2014 to 2023
@@ -14,65 +6,35 @@ format: html
 # Date: 18 January 2024
 # Prerequisites: Know where to get major crimes data.
 # I will use MCI as an abbreviation of Major Crime Indicator
-```
 
-```{r}
-# Install all the packages I need for this analysis
-install.packages('opendatatoronto')
-install.packages('dplyr')
-install.packages('tidyverse')
-install.packages('janitor')
-install.packages('leaflet')
-install.packages('ggplot2')
-install.packages('knitr')
-install.packages('here')
-```
-
-```{r}
 library(opendatatoronto)
 library(dplyr)
 library(tidyverse)
 library(here)
 library(janitor)
-```
 
-```{r}
 # get package and all resources for this package
 package <- show_package("major-crime-indicators")
 resources <- list_package_resources("major-crime-indicators")
-
-# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
 datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
+raw_mci_data <- filter(datastore_resources, row_number()==2) |> get_resource()
 
-# load the second one
-raw_mci_data <- filter(datastore_resources, row_number()==2) %>% get_resource()
-```
-
-```{r}
 # Write data
 write_csv (
   x = raw_mci_data,
   file = "unedited_data.csv"
 )
-```
 
-```{r}
 # Read and clean the dataset
 raw_mci_data <- read_csv(
-    file = here("inputs/data/unedited_data.csv"))
+  file = here("inputs/data/unedited_data.csv"))
 clean_mci_data <- clean_names(raw_mci_data)
-```
 
-```{r}
 # Write the cleaned dataset
 write_csv (
   x = clean_mci_data,
   file = "clean_mci.csv"
 )
-```
 
-```{r}
 clean_mci_data <- read_csv(
-    file = here("inputs/data/clean_mci.csv"))
-```
-
+  file = here("inputs/data/clean_mci.csv"))

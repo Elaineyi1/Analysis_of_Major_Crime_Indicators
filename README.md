@@ -1,7 +1,7 @@
 # Analysis of Major Crime Indicator in Toronto
 
 ## Overview of Paper
-This paper analyzes the distribution of major crimes in Toronto over the past ten years. To be more specific, it discusses the distribution of different types of crimes, regions and times.
+This paper analyzes the distribution of major crimes in Toronto over the past ten years. To be more specific, it discusses the distribution of different types of crimes, regions and times.No use of LLM
 
 ## Structure
 There are three folders:
