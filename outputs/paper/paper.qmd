@@ -1,14 +1,16 @@
 ---
 title: "Analysis of Major Crimes in Toronto And Suggestions on How to Protect Ourselves"
 author: "Boxuan Yi"
-date: 20 January 2024
-thanks: "Code and data in this analysis is available at: https://github.com/Elaineyi1/Sta302_Major_Crime_Indicators"
+date: 22 January 2024
+thanks: "Code and data in this analysis is available at: https://github.com/Elaineyi1/Analysis_of_Major_Crime_Indicators"
 abstract: "Safety is one of the most important factors that people consider when deciding where to live and go. This report uses data from Open Data Toronto to analyze the occurrences of various types of crimes in different regions and time of Toronto, as well as the trend over the past ten years. The result shows that Downtown Toronto and evenings & noon have a relatively high occurrences of crimes, which could be used as a suggestion on both individual and government dicision-making."
 format: pdf
 toc: true
 number-sections: true
 bibliography: references.bib
 ---
+
+\newpage
 # Introduction
 On Dec 25th, 2023, the Christmas Day, a news has raised huge concerns among people — a man was seriously injured after stabbing in downtown Toronto. This was not the first such incident on that block in December; unfortunately, such distressing news has become more and more prevalent nowadays. As the pandemic comes to an end, there is a noticeable increase in people returning to the office and going out more frequently than in previous years. Naturally, public safety and private security have become particularly crucial, leading to a significant question: How can we proactively prevent such incidents from affecting ourselves and our loved ones?
 
@@ -191,7 +193,7 @@ clean_mci_data |>
   count(occ_hour, weekday_weekend) |>
   ggplot(mapping = aes(x = occ_hour, y = n, color = weekday_weekend)) +
   geom_line() +
-  theme(legend.position = "top") +
+  theme(legend.position = "right") +
   labs(x = "Time In a Day", y = "Number of Crimes", color = "Weekday or Weekend") +
   scale_color_manual(values = c("Weekday" = "steelblue3", "Weekend" = "indianred3"))
 ```

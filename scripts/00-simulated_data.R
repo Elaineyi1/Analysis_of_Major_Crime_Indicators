@@ -2,6 +2,7 @@
 # Author: Boxuan Yi
 # Email: boxuan.yi@mail.utoronto.ca
 # Date: 17 January 2024
+# There are four simulations
 
 install.packages('opendatatoronto')
 install.packages('dplyr')
@@ -14,13 +15,15 @@ install.packages('here')
 
 library(tidyverse)
 library(janitor)
+library(knitr)
 
 # Plan
-![Plan Image](project/scripts/plan.png)
+cat("![My plan](project/scripts/plan.png)\n")
 
 
 # Simulate
-# Simulation for the number of crimes in each year (2014-2023) and the month with the most crimes in each year
+# Simulation for the number of crimes in each year (2014-2023),
+# and the month with the most crimes in each year
 set.seed(7)
 months <- c("January", "February", "March", "April", "May", "June", "July",
             "August", "September", "October", "November", "December")
