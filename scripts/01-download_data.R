@@ -39,7 +39,7 @@ write_csv (
 clean_mci_data <- read_csv(
   file = here("inputs/data/clean_mci.csv"))
 
-# Test
+# Tests
 clean_mci_data$report_year |> min() == 2014
 clean_mci_data$report_year |> max() == 2023
 clean_mci_data$occ_year |> unique()

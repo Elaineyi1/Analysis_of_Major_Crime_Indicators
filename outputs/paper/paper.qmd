@@ -42,7 +42,7 @@ clean_mci_data <- read_csv(
 ```{r}
 #| include: false
 # Explore
-# Test
+# Tests
 clean_mci_data$report_year |> min() == 2014
 clean_mci_data$report_year |> max() == 2023
 clean_mci_data$occ_year |> unique()
@@ -74,7 +74,7 @@ The Major Crimes in Toronto dataset contains 27 columns and 372899 rows, includi
 #| echo: false
 #| label: tbl-clean_mci_data
 #| tbl-cap: The Number of Major Crimes occurred and the Month with the Most Crimes (2014-2023)
-# Create a table with year, 2014 to 2023, the number of crimes in each year, and the month with the most crimes correspondingly.
+# Create a table with years, 2014 to 2023, the number of crimes in each year, and the month with the most crimes correspondingly.
 clean_mci_data |>
   filter(occ_year >= 2014) |>
   group_by(occ_year, occ_month) |>
@@ -98,6 +98,7 @@ clean_mci_data |>
 #| echo: false
 #| label: fig-types_of_crimes
 #| fig-cap: The Number of Crimes Reported, Classified by Crime Types (2014-2023)
+# Create a histogram with numbers of crimes classified by crime types from 2014 to 2023
 clean_mci_data |>
   ggplot(mapping = aes(x = factor(report_year), fill = mci_category)) +
   geom_bar(position = "stack", stat = "count") +
@@ -111,6 +112,7 @@ Factors contributing to this uptrend are multifaceted, ranging from societal shi
 
 ```{r}
 #| include: false
+# Create a new variable division_area, which put 18 police divisions (including a NSA) into 6 regions of Toronto (including Other for NSA)
 clean_mci_data <- clean_mci_data |>
   mutate(
     division_area =
@@ -138,6 +140,7 @@ clean_mci_data <- clean_mci_data |>
 
 ```{r}
 #| include: false
+# Create a new variable weekend_weekday, which indicates whether the occurrence happen on a weekday or a weekend
 clean_mci_data <- clean_mci_data |> 
   mutate(
     weekday_weekend =
@@ -153,13 +156,13 @@ clean_mci_data <- clean_mci_data |>
         "" ~ "Other"))
 clean_mci_data
 ```
-There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. I put them into 6 geographical regions, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York, and other as shown in @tbl-division_area. Based on @fig-area_of_crimes, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two. It is crucial to recognize that, though Toronto-East York records the most crimes, it also has the largest number of residents. Therefore, it could be biased to claim that Toronto-East York has the highest crime rate, or North York is getting dangerous, as North York has witnessed a growing population in recent years. Moreover, when creating this dataset, one occurrence number may have a few rows with different major crime indicators types used to categorize the occurrence. Therefore, some incidents of 'Auto Theft,' 'Robbery,' and 'Theft Over' may be potentially recorded multiple times under 'Break and Enter.' Consequently, the number of crimes classified as just ‘Break and Enter’ is overestimated, the actual number may be lower than what is shown now in the dataset.
+There are 18 police divisions, which are D11, D12, D13, D14, D22, D23, D31, D32, D33, D41, D42, D43, D51, D52, D53, D54, D55, and NSA. I put them into 6 geographical regions, Etobicoke-York, Etobicoke, North York, Scarborough, Toronto-East York and other, as shown in @tbl-division_area. Based on @fig-area_of_crimes, Toronto-East York reports the highest amount of crimes, and Etobicoke-York has the lowest. North York, Scarborough, and Etobicoke-York have similar numbers, but the rate of increase in North York is higher than that observed in the other two. It is crucial to recognize that, though Toronto-East York records the most crimes, it also has the largest number of residents. Therefore, it could be biased to claim that Toronto-East York has the highest crime rate, or North York is getting dangerous, as North York has witnessed a growing population in recent years. Moreover, when creating this dataset, one occurrence number may have a few rows with different major crime indicators types used to categorize the occurrence. Therefore, some incidents of 'Auto Theft,' 'Robbery,' and 'Theft Over' may be potentially recorded multiple times under 'Break and Enter.' Consequently, the number of crimes classified as just ‘Break and Enter’ is overestimated, the actual number may be lower than what is shown now in the dataset.
 ```{r}
 #| message: false
 #| echo: false
 #| label: tbl-division_area
 #| tbl-cap: Police divisions classified into six areas (including other)
-
+# Create a table to show the realation between the new variable division_area and division
 clean_mci_data |>
   group_by(division_area) |>
   summarise(division = toString(unique(division))) |> kable()
@@ -171,6 +174,7 @@ clean_mci_data |>
 #| echo: false
 #| label: fig-area_of_crimes
 #| fig-cap: Total Number of Crimes Occurred in Different Police Division Areas (2014-2023)
+# Visualize the number of crimes occurred in different police division areas
 clean_mci_data |>
   filter(occ_year >= 2014) |>
   count(occ_year, division_area) |>
@@ -189,6 +193,7 @@ clean_mci_data |>
 #| echo: false
 #| label: fig-time_of_crimes
 #| fig-cap: Total Number of Crimes Occurred in a Day
+# Create a line chart showing the total number of crimes occurred in 24 hours in a day
 clean_mci_data |>
   filter(weekday_weekend == 'Weekday' | weekday_weekend == 'Weekend') |>
   count(occ_hour, weekday_weekend) |>
