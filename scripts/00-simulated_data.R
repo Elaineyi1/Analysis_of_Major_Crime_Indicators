@@ -4,6 +4,7 @@
 # Date: 17 January 2024
 # There are four simulations
 
+# Install all the packages I need
 install.packages('opendatatoronto')
 install.packages('dplyr')
 install.packages('tidyverse')
@@ -19,7 +20,6 @@ library(knitr)
 
 # Plan
 cat("![My plan](project/scripts/plan.png)\n")
-
 
 # Simulate
 # Simulation for the number of crimes in each year (2014-2023),

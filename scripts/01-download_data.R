@@ -13,7 +13,7 @@ library(tidyverse)
 library(here)
 library(janitor)
 
-# get package and all resources for this package
+# Get package and all resources for this package
 package <- show_package("major-crime-indicators")
 resources <- list_package_resources("major-crime-indicators")
 datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
@@ -38,3 +38,13 @@ write_csv (
 
 clean_mci_data <- read_csv(
   file = here("inputs/data/clean_mci.csv"))
+
+# Test
+clean_mci_data$report_year |> min() == 2014
+clean_mci_data$report_year |> max() == 2023
+clean_mci_data$occ_year |> unique()
+any(duplicated(clean_mci_data$x_id))
+clean_mci_data$mci_category |> unique() == c("Assault", "Robbery", "Auto Theft", "Break and Enter", "Theft Over")
+clean_mci_data$division |> unique()
+clean_mci_data$occ_dow |> unique()
+clean_mci_data$occ_hour |> class() == "numeric"
